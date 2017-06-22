@@ -1,0 +1,17 @@
+<ul class="nav nav-tabs" #theTab>
+	<li class="active"><a href="#" (click)="active('entity', $event)">Entity</a></li>
+	<li><a href="#" (click)="active('repository', $event)">Repository</a></li>
+	<li><a href="#" (click)="active('service', $event)">Service</a></li>
+</ul>
+
+<div *ngIf="show == 'entity'" class="result-code">
+	<pre>{{contentEntity}}</pre>
+</div>
+
+<div *ngIf="show == 'repository'" class="result-code">
+	<pre>{{contentRepository}}</pre>
+</div>
+
+<div *ngIf="show == 'service'" class="result-code">
+	<pre>{{contentService}}</pre>
+</div>

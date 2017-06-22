@@ -1,0 +1,12 @@
+#result-box {
+	margin-top: 1.5em;
+}
+
+#area-form {
+	background-color: #dddddd;
+	margin-top: 1.5em;
+}
+
+#area-form > div {
+	padding: 1em;
+}
