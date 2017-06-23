@@ -29,6 +29,7 @@ interface SFormObject {
 export class TemplateResult {
 
 	@ViewChild("theTab") private theTab: ElementRef;
+	@ViewChild("theTextArea") private theTextArea: ElementRef;
 	private contentEntity: string = "Entity";
 	private contentRepository: string = "Repository";
 	private contentService: string = "Service";
@@ -118,9 +119,13 @@ export class TemplateResult {
 
 		let nl = "\r\n";
 		let nlnl = "\r\n\r\n";
-		let result = "class " + obj.className + " {" + nlnl;
+		let result = "public class " + obj.className + " implements Persistable<" + fields[0].progTypeClass + "> {" + nlnl;
 
-		result += "\tprivate static final long serialVersionUID = 4055318420502290942L;" + nlnl;
+		let max: number = 9999999999999999999;
+		let min: number = 1000000000000000000;
+		let x: number = Math.random() * (max - min) + min;
+
+		result += "\tprivate static final long serialVersionUID = " + x + "L;" + nlnl;
 
 		//vars
 		for (let i = 0, l = fields.length; i < l; i++) {
@@ -129,6 +134,11 @@ export class TemplateResult {
 		}
 
 		result += nl + "\t@Getter @Setter private transient boolean persisted;" + nlnl;
+
+		result += "\t@Override" + nl;
+		result += "\tpublic boolean isNew() {" + nl;
+		result += "\t\treturn !persisted;" + nl;
+		result += "\t}" + nlnl;
 
 		result += "}" + nl;
 
@@ -142,7 +152,7 @@ export class TemplateResult {
 
 		//constructor
 		result += "\tpublic " + obj.className + "Repository() {" + nl;
-		result += "\t\tsuper(ROW_MAPPER, ROW_UNMAPPER, " + obj.className + ".TABLE, \"" + fields[0].name + "\");" + nl;
+		result += "\t\tsuper(ROW_MAPPER, ROW_UNMAPPER, \"" + obj.tableName + "\", \"" + fields[0].name + "\");" + nl;
 		result += "\t\tthis.setSqlGenerator(new MssqlSqlGenerator());" + nl;
 		result += "\t}" + nlnl;
 
@@ -180,5 +190,23 @@ export class TemplateResult {
 		let fields: FieldMod[] = this.modFields(obj.fields);
 		this.contentEntity = this.generateEntity(obj, fields);
 		this.contentRepository = this.generateRepository(obj, fields);
+	}
+
+	public copyContent() {
+		let ta: HTMLTextAreaElement = this.theTextArea.nativeElement;
+		switch (this.show) {
+			case "entity":
+				ta.value = this.contentEntity;
+			break;
+			case "repository":
+				ta.value = this.contentRepository;
+			break;
+			case "service":
+				ta.value = this.contentService;
+			break;
+		}
+		ta.focus();
+		ta.select();
+		window.document.execCommand("copy");
 	}
 }

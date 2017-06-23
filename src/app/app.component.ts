@@ -12,9 +12,15 @@ export class AppComponent {
 
   @ViewChild("theForm") private theForm: FormInitial;
   @ViewChild("theResult") private theResult: TemplateResult;
+  private generated: boolean = false;
   title = 'app';
 
   private generate() {
     this.theResult.generate(this.theForm.export());
+    this.generated = true;
+  }
+
+  private copyContent() {
+    this.theResult.copyContent();
   }
 }

@@ -2,6 +2,7 @@
 
 <div style="margin-top: 1.5em;">
 	<button class="btn btn-primary" (click)="generate()">GENERATE</button>
+	<button *ngIf="generated" class="btn btn-primary" (click)="copyContent()">COPY</button>
 </div>
 
 <div id="result-box">
