@@ -57,6 +57,37 @@ export class FormInitial {
 		console.log("Updated: ", this.tableName);
 	}
 
+	private addTestData() {
+		this.tableName = "DIMI_SHARED_DAILY";
+		this.className = "ShareDaily";
+		this.fields = [
+			{
+				name: "ID",
+				type: "VARCHAR"
+			},
+			{
+				name: "USER_ID",
+				type: "VARCHAR"
+			},
+			{
+				name: "CREATE_DATE",
+				type: "TIMESTAMP"
+			},
+			{
+				name: "CONTENT",
+				type: "VARCHAR"
+			}
+		];
+
+		setTimeout(() => {
+			let table: HTMLTableElement = this.theFieldsRef.nativeElement;
+			let rows: HTMLCollectionOf<HTMLTableRowElement> = table.tBodies[0].rows;
+			let sel: HTMLSelectElement = rows[2].cells[1].getElementsByTagName("select")[0];
+			sel.selectedIndex = 5;
+		}, 0);
+
+	}
+
 	public export(): SFormObject {
 		let table: HTMLTableElement = this.theFieldsRef.nativeElement;
 		let rows: HTMLCollectionOf<HTMLTableRowElement> = table.tBodies[0].rows;

@@ -115,11 +115,11 @@ export class TemplateResult {
 		return result;
 	}
 
-	private generateEntity(obj: SFormObject, fields: FieldMod[]) {
+	private generateEntity(obj: SFormObject, fields: FieldMod[]): string {
 
-		let nl = "\r\n";
-		let nlnl = "\r\n\r\n";
-		let result = "public class " + obj.className + " implements Persistable<" + fields[0].progTypeClass + "> {" + nlnl;
+		let nl: string = "\r\n";
+		let nlnl: string = "\r\n\r\n";
+		let result: string = "public class " + obj.className + " implements Persistable<" + fields[0].progTypeClass + "> {" + nlnl;
 
 		let max: number = 9999999999999999999;
 		let min: number = 1000000000000000000;
@@ -146,8 +146,8 @@ export class TemplateResult {
 	}
 
 	private generateRepository(obj: SFormObject, fields: FieldMod[]): string {
-		let nl = "\r\n";
-		let nlnl = "\r\n\r\n";
+		let nl: string = "\r\n";
+		let nlnl: string = "\r\n\r\n";
 		let result: string = "public class " + obj.className + "Repository extends JdbcRepository<" + obj.className + ", " + fields[0].progTypeClass + "> {" + nlnl;
 
 		//constructor
@@ -160,23 +160,24 @@ export class TemplateResult {
 		result += "\tpublic static final RowMapper<" + obj.className + "> ROW_MAPPER = new RowMapper<" + obj.className + ">() {" + nlnl;
 		result += "\t\t@Override" + nl;
 		result += "\t\tpublic " + obj.className + " mapRow(ResultSet rs, int rowNum) throws SQLException {" + nl;
-		result += "\t\t\t" + obj.className + " result = new " + obj.className + "();" + nl;
+		result += "\t\t\t" + obj.className + " entity = new " + obj.className + "();" + nl;
 		for (let i = 0, l = fields.length; i < l; i++) {
 			let field: FieldMod = fields[i];
-			result += "\t\t\tresult.set" + field.progName + "(rs.get" + field.progTypeClass + "(\"" + field.name + "\"));" + nl;
+			result += "\t\t\tentity.set" + field.progName + "(rs.get" + field.progTypeClass + "(\"" + field.name + "\"));" + nl;
 		}
-		result += "\t\t\treturn result;" + nl;
+		//result += "\t\t\tentity.setPersisted(true);" + nl;
+		result += "\t\t\treturn entity;" + nl;
 		result += "\t\t}" + nlnl;
 		result += "\t};" + nlnl;
 
 		//row unmapper
 		result += "\tprivate static final RowUnmapper<" + obj.className + "> ROW_UNMAPPER = new RowUnmapper<" + obj.className + ">() {" + nlnl;
 		result += "\t\t@Override" + nl;
-		result += "\t\tpublic Map<String, Object> mapColumns(" + obj.className + " e) {" + nl;
+		result += "\t\tpublic Map<String, Object> mapColumns(" + obj.className + " entity) {" + nl;
 		result += "\t\t\tMap<String, Object> mapping = new LinkedHashMap<String, Object>();" + nl;
 		for (let i = 0, l = fields.length; i < l; i++) {
 			let field: FieldMod = fields[i];
-			result += "\t\t\tif (e.get" + field.progName + "() != null) mapping.put(\"" + field.name + "\", e.get" + field.progName + "());" + nl;
+			result += "\t\t\tif (entity.get" + field.progName + "() != null) mapping.put(\"" + field.name + "\", entity.get" + field.progName + "());" + nl;
 		}
 		result += "\t\t\treturn mapping;" + nl;
 		result += "\t\t}" + nlnl;
@@ -186,10 +187,25 @@ export class TemplateResult {
 		return result;
 	}
 
+	public generateService(obj: SFormObject, fields: FieldMod[]): string {
+		let nl: string = "\r\n";
+		let nlnl: string = "\r\n\r\n";
+		let result: string = "@Service(\"" + obj.className + "Service\")" + nl;
+		result += "public class " + obj.className + "Service {" + nlnl;
+		result += "\t@Autowired" + nl;
+
+		let repo: string = obj.className.charAt(0).toLowerCase() + obj.className.substr(1) + "Repository";
+		result += "\tprivate " + obj.className + "Repository " + repo + ";" + nlnl;
+		
+		result += "}" + nl;
+		return result;
+	}
+
 	public generate(obj: SFormObject) {
 		let fields: FieldMod[] = this.modFields(obj.fields);
 		this.contentEntity = this.generateEntity(obj, fields);
 		this.contentRepository = this.generateRepository(obj, fields);
+		this.contentService = this.generateService(obj, fields);
 	}
 
 	public copyContent() {
