@@ -130,7 +130,7 @@ export class TemplateResult {
 		//vars
 		for (let i = 0, l = fields.length; i < l; i++) {
 			let field: FieldMod = fields[i];
-			result += "\t@Getter @Setter private " + field.progType + " " + field.progNameVar + ";" + nl;
+			result += "\t@Getter @Setter private " + field.progTypeClass + " " + field.progNameVar + ";" + nl;
 		}
 
 		result += nl + "\t@Getter @Setter private transient boolean persisted;" + nlnl;
