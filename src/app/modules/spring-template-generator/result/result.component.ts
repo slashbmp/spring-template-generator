@@ -119,7 +119,12 @@ export class TemplateResult {
 
 		let nl: string = "\r\n";
 		let nlnl: string = "\r\n\r\n";
-		let result: string = "public class " + obj.className + " implements Persistable<" + fields[0].progTypeClass + "> {" + nlnl;
+		let result: string = "@JsonIgnoreProperties(value = { \"id\", \"new\", \"persisted\" }, ignoreUnknown = true)" + nl +
+		"@JsonInclude(JsonInclude.Include.NON_NULL)" + nl +
+		"@NoArgsConstructor" + nl +
+		"@ToString(exclude = {\"persisted\", \"new\"})" + nl +
+		"@EqualsAndHashCode" + nl +
+		"public class " + obj.className + " implements Persistable<" + fields[0].progTypeClass + "> {" + nlnl;
 
 		let max: number = 9999999999999999999;
 		let min: number = 1000000000000000000;
@@ -148,7 +153,7 @@ export class TemplateResult {
 	private generateRepository(obj: SFormObject, fields: FieldMod[]): string {
 		let nl: string = "\r\n";
 		let nlnl: string = "\r\n\r\n";
-		let result: string = "public class " + obj.className + "Repository extends JdbcRepository<" + obj.className + ", " + fields[0].progTypeClass + "> {" + nlnl;
+		let result: string = "@Repository" + nl + "public class " + obj.className + "Repository extends JdbcRepository<" + obj.className + ", " + fields[0].progTypeClass + "> {" + nlnl;
 
 		//constructor
 		result += "\tpublic " + obj.className + "Repository() {" + nl;
