@@ -3,6 +3,9 @@
 	<li class="active"><a href="#" (click)="active('entity', $event)">Entity</a></li>
 	<li><a href="#" (click)="active('repository', $event)">Repository</a></li>
 	<li><a href="#" (click)="active('service', $event)">Service</a></li>
+	<li><a href="#" (click)="active('repoInterface', $event)">Repo-Interface</a></li>
+	<li><a href="#" (click)="active('repositoryMock', $event)">Repository Mock</a></li>
+	<li><a href="#" (click)="active('testFile', $event)">Test File</a></li>
 </ul>
 
 <div *ngIf="show == 'entity'" class="result-code">
@@ -15,4 +18,16 @@
 
 <div *ngIf="show == 'service'" class="result-code">
 	<pre>{{contentService}}</pre>
+</div>
+
+<div *ngIf="show == 'repoInterface'" class="result-code">
+	<pre>{{contentTestRepoInterface}}</pre>
+</div>
+
+<div *ngIf="show == 'repositoryMock'" class="result-code">
+	<pre>{{contentRepositoryMock}}</pre>
+</div>
+
+<div *ngIf="show == 'testFile'" class="result-code">
+	<pre>{{contentTestFile}}</pre>
 </div>
