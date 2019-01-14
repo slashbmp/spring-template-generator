@@ -257,7 +257,7 @@ export class TemplateResult {
 		result += "public class " + obj.className + "RepositoryMock extends " + obj.className + "Repository implements UnitTestRepositoryInterface {" + nlnl;
 		result += "\tprivate static String sessionPrefix = UnitTestDatabaseUtil.generateTableSessionName() + \"_GEN_\";" + nlnl;
 		result += "\tprivate DataSource dataSource;" + nlnl;
-		result += "\tpublic " + obj.className + "RepositoryMySql() {" + nlnl;
+		result += "\tpublic " + obj.className + "RepositoryMock() {" + nlnl;
 		result += "\t\tsuper(sessionPrefix);" + nlnl;
 		result += "\t\ttry {" + nl;
 		result += "\t\t\tif (dataSource == null) {" + nl;
